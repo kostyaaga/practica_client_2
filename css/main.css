@@ -13,35 +13,46 @@ body {
     background: #f3f3f3;
     border-radius: 5px;
 }
+
+/* Анимация для перемещения карточек */
+.move-enter-active, .move-leave-active {
+    transition: transform 0.5s ease;
+}
+
+.move-enter, .move-leave-to /* .move-leave-active in <2.1.8 */ {
+    transform: translateX(30px);  /* Начальная и конечная позиция */
+    opacity: 0;
+}
+
+/* Стили для карточек */
 .note {
-    background: white;
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
+    transition: all 0.3s ease;
 }
 
-.note.favorite {
-    transform: scale(1.05); /* Немного увеличиваем */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+.favorite {
+    background-color: #f0f0f0;
 }
 
-/* Анимация перемещения вверх */
 .move-up {
-    animation: moveUp 0.3s ease-in-out;
+    animation: moveUp 0.5s ease;
 }
 
+/* Анимация для заметок, помеченных как избранные */
 @keyframes moveUp {
-    from {
-        transform: translateY(15px);
-        opacity: 0.5;
+    0% {
+        transform: translateY(10px);
+        opacity: 0;
     }
-    to {
+    100% {
         transform: translateY(0);
         opacity: 1;
     }
 }
+
 
 
 

@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Менеджер заметок</h1>
-        <button @click="clearStorage">Очистить данные</button>
-        <div class="columns">
-            <div class="column">
-                <h2>Новые</h2>
+<div id="app">
+    <h1>Менеджер заметок</h1>
+    <button @click="clearStorage">Очистить данные</button>
+    <div class="columns">
+        <div class="column">
+            <h2>Новые</h2>
+            <transition-group name="move" tag="div">
                 <div v-for="(note, index) in columns[0]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite, 'move-up': note.isMoving}">
                     <h3>{{ note.title }}</h3>
                     <button @click="toggleFavorite(note)">Избранное</button>
@@ -25,13 +26,15 @@
                         </li>
                     </ul>
                 </div>
-                <button @click="addNote(0)" :disabled="isBlocked || columns[0].length >= 3">
-                    Добавить
-                </button>
-            </div>
-    
-            <div class="column">
-                <h2>В процессе</h2>
+            </transition-group>
+            <button @click="addNote(0)" :disabled="isBlocked || columns[0].length >= 3">
+                Добавить
+            </button>
+        </div>
+
+        <div class="column">
+            <h2>В процессе</h2>
+            <transition-group name="move" tag="div">
                 <div v-for="(note, index) in columns[1]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite}">
                     <h3>{{ note.title }}</h3>
                     <button @click="toggleFavorite(note)">Избранное</button>
@@ -42,16 +45,20 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-    
-            <div class="column">
-                <h2>Завершенные</h2>
+            </transition-group>
+        </div>
+
+        <div class="column">
+            <h2>Завершенные</h2>
+            <transition-group name="move" tag="div">
                 <div v-for="(note, index) in columns[2]" :key="note.id" class="note">
                     <h3>{{ note.title }}</h3>
                     <p>Завершено: {{ note.completedAt }}</p>
                 </div>
-            </div>
+            </transition-group>
         </div>
     </div>
+</div>
+
 </body>
 </html>
