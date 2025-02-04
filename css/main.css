@@ -1,0 +1,16 @@
+body {
+     font-family: Arial, sans-serif;
+    }
+
+.container { 
+    display: flex; 
+    gap: 20px; 
+    padding: 20px;
+ }
+
+.column { 
+    width: 30%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    min-height: 200px; 
+}
