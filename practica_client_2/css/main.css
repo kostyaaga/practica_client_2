@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+.columns {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+.column {
+    width: 300px;
+    padding: 10px;
+    background: #f3f3f3;
+    border-radius: 5px;
+}
+.note {
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+}
+
+.note.favorite {
+    transform: scale(1.05); /* Немного увеличиваем */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Анимация перемещения вверх */
+.move-up {
+    animation: moveUp 0.3s ease-in-out;
+}
+
+@keyframes moveUp {
+    from {
+        transform: translateY(15px);
+        opacity: 0.5;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+
+.note ul{
+    text-align: start;
+}
+
+ul{
+    list-style: none;
+}
+
+button{
+   padding: 5px 10px;
+   border-radius: 5px;
+   border: none;
+   margin-bottom: 20px;
+   background-color: #ffffff;
+   cursor: pointer;
+   transition: all ease-out 0.2s;
+}
+
+button:hover{
+    transform: translateY(-5px) scale(110%);
+}
+
+.locked {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.favorite {
+    background-color: yellow; /* Цвет для избранных карточек */
+}

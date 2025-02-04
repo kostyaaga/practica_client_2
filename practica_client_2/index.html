@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки</title>
+    <script defer src="js/vue.min.js"></script>
+    <script defer src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Менеджер заметок</h1>
+        <button @click="clearStorage">Очистить данные</button>
+        <div class="columns">
+            <div class="column">
+                <h2>Новые</h2>
+                <div v-for="(note, index) in columns[0]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite, 'move-up': note.isMoving}">
+                    <h3>{{ note.title }}</h3>
+                    <button @click="toggleFavorite(note)">Избранное</button>
+                    <ul>
+                        <li v-for="(item, i) in note.items" :key="i">
+                            <input type="checkbox" v-model="item.done" @change="updateProgress()" :disabled="item.disabled">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+                <button @click="addNote(0)" :disabled="isBlocked || columns[0].length >= 3">
+                    Добавить
+                </button>
+            </div>
+    
+            <div class="column">
+                <h2>В процессе</h2>
+                <div v-for="(note, index) in columns[1]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite}">
+                    <h3>{{ note.title }}</h3>
+                    <button @click="toggleFavorite(note)">Избранное</button>
+                    <ul>
+                        <li v-for="(item, i) in note.items" :key="i">
+                            <input type="checkbox" v-model="item.done" @change="updateProgress()">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="column">
+                <h2>Завершенные</h2>
+                <div v-for="(note, index) in columns[2]" :key="note.id" class="note">
+                    <h3>{{ note.title }}</h3>
+                    <p>Завершено: {{ note.completedAt }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
