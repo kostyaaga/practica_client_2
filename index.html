@@ -15,8 +15,9 @@
         <div class="columns">
             <div class="column">
                 <h2>Новые</h2>
-                <div v-for="(note, index) in columns[0]" :key="note.id" class="note">
+                <div v-for="(note, index) in columns[0]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite}">
                     <h3>{{ note.title }}</h3>
+                    <button @click="toggleFavorite(note)">Избранное</button>
                     <ul>
                         <li v-for="(item, i) in note.items" :key="i">
                             <input type="checkbox" v-model="item.done" @change="updateProgress()">
@@ -31,8 +32,9 @@
     
             <div class="column">
                 <h2>В процессе</h2>
-                <div v-for="(note, index) in columns[1]" :key="note.id" class="note">
+                <div v-for="(note, index) in columns[1]" :key="note.id" :class="{'note': true, 'favorite': note.isFavorite}">
                     <h3>{{ note.title }}</h3>
+                    <button @click="toggleFavorite(note)">Избранное</button>
                     <ul>
                         <li v-for="(item, i) in note.items" :key="i">
                             <input type="checkbox" v-model="item.done" @change="updateProgress()">

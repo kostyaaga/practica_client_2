@@ -41,3 +41,12 @@ button{
 button:hover{
     transform: translateY(-5px) scale(110%);
 }
+
+.locked {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.favorite {
+    background-color: yellow; /* Цвет для избранных карточек */
+}
