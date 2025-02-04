@@ -1,16 +1,43 @@
 body {
-     font-family: Arial, sans-serif;
-    }
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+.columns {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+.column {
+    width: 300px;
+    padding: 10px;
+    background: #f3f3f3;
+    border-radius: 5px;
+}
+.note {
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
 
-.container { 
-    display: flex; 
-    gap: 20px; 
-    padding: 20px;
- }
+.note ul{
+    text-align: start;
+}
 
-.column { 
-    width: 30%; 
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    min-height: 200px; 
+ul{
+    list-style: none;
+}
+
+button{
+   padding: 5px 10px;
+   border-radius: 5px;
+   border: none;
+   margin-bottom: 20px;
+   background-color: #ffffff;
+   cursor: pointer;
+   transition: all ease-out 0.2s;
+}
+
+button:hover{
+    transform: translateY(-5px) scale(110%);
 }

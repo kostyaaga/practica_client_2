@@ -10,17 +10,43 @@
 </head>
 <body>
     <div id="app">
-        <button @click="addNote(0)">Добавить заметку</button>
-        <div class="container">
-            <div class="column" v-for="(notes, index) in columns">
-                <h3>Колонка {{ index + 1 }}</h3>
-                <div class="note" v-for="note in notes">
-                    <h4>{{ note.title }}</h4>
+        <h1>Менеджер заметок</h1>
+        <button @click="clearStorage">Очистить данные</button>
+        <div class="columns">
+            <div class="column">
+                <h2>Новые</h2>
+                <div v-for="(note, index) in columns[0]" :key="note.id" class="note">
+                    <h3>{{ note.title }}</h3>
                     <ul>
-                        <li v-for="item in note.items">
-                            <input type="checkbox" v-model="item.done"> {{ item.text }}
+                        <li v-for="(item, i) in note.items" :key="i">
+                            <input type="checkbox" v-model="item.done" @change="updateProgress()">
+                            {{ item.text }}
                         </li>
                     </ul>
+                </div>
+                <button @click="addNote(0)" :disabled="isBlocked || columns[0].length >= 3">
+                    Добавить
+                </button>
+            </div>
+    
+            <div class="column">
+                <h2>В процессе</h2>
+                <div v-for="(note, index) in columns[1]" :key="note.id" class="note">
+                    <h3>{{ note.title }}</h3>
+                    <ul>
+                        <li v-for="(item, i) in note.items" :key="i">
+                            <input type="checkbox" v-model="item.done" @change="updateProgress()">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="column">
+                <h2>Завершенные</h2>
+                <div v-for="(note, index) in columns[2]" :key="note.id" class="note">
+                    <h3>{{ note.title }}</h3>
+                    <p>Завершено: {{ note.completedAt }}</p>
                 </div>
             </div>
         </div>
