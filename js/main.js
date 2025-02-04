@@ -39,64 +39,64 @@ new Vue({
         },
 
         updateProgress() {
-            let movedToSecond = false;
+            let secondColumnFull = this.columns[1].length >= 5;
 
-            // Блокировка возможности отмечать более 50% в первом столбце
-            if (this.isBlocked) {
-                if (!this.isLocked) {
-                    this.isLocked = true; // Блокируем чекбоксы
-                    this.columns[0].forEach(note => {
-                        note.items.forEach(item => {
-                            if (item.done) {
-                                item.done = false; // Снимаем отметки
-                            }
-                        });
-                    });
-                    alert("Нельзя отметить более 50% пунктов в первом столбце, пока не освободится место во втором!");
-                }
-                return; // Прерываем выполнение, если заблокировано
-            }
+            this.columns[0].forEach(note => {
+                let completed = note.items.filter(i => i.done).length;
+                let total = note.items.length;
 
-            // Снимаем блокировку и восстанавливаем возможность отмечать
-            if (this.isLocked && !this.isBlocked) {
-                this.isLocked = false;
-            }
+                // Флаг, запрещающий ставить более 50% галочек
+                note.canCompleteMoreThan50 = !(secondColumnFull && completed / total >= 0.5);
 
-            // Обновляем первый столбец, перемещая завершенные заметки во второй
+                // Блокировка чекбоксов, если нельзя отметить больше 50%
+                note.items.forEach(item => {
+                    item.disabled = !item.done && !note.canCompleteMoreThan50;
+                });
+            });
+
+            // Перемещаем заметки во второй столбец, если выполнено больше 50%
             this.columns[0] = this.columns[0].filter(note => {
                 let completed = note.items.filter(i => i.done).length;
                 let total = note.items.length;
-                
-                if (completed / total > 0.5 && this.columns[1].length < 5) {
+
+                if (total > 0 && completed / total > 0.5 && !secondColumnFull) {
                     this.columns[1].push(note);
-                    movedToSecond = true;
                     return false;
                 }
                 return true;
             });
 
-            // Обновляем второй столбец, перемещая завершенные заметки в третий
             this.columns[1] = this.columns[1].filter(note => {
-                let completed = note.items.every(i => i.done);
-                
+                let completed = note.items.filter(i => i.done).length;
+                let total = note.items.length;
+
+                // Если выполнено меньше 50%, перемещаем в первый столбец
+                if (completed / total < 0.5) {
+                    this.columns[0].unshift(note);  // Добавляем обратно в первый столбец
+                    return false;  // Убираем из второго столбца
+                }
+                return true;
+            });
+
+            // Перемещаем завершенные заметки в третий столбец
+            this.columns[1] = this.columns[1].filter(note => {
+                let completed = note.items.every(i => i.done) && note.items.length > 0;
+
                 if (completed) {
+                    // Устанавливаем дату и время завершения
                     note.completedAt = new Date().toLocaleString();
-                    this.columns[2].push(note);
+                    // Вставляем заметку в начало столбца "Завершенные"
+                    this.columns[2].unshift(note);
                     return false;
                 }
                 return true;
             });
 
-            // Сортируем столбцы: избранные карточки должны быть первыми
+            // Сортировка по избранному
             this.columns[0] = this.sortByFavorite(this.columns[0]);
             this.columns[1] = this.sortByFavorite(this.columns[1]);
 
-            // Сортировка третьего столбца по дате завершения
-            this.columns[2] = this.columns[2].sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-
-            if (movedToSecond) {
-                this.saveData();
-            }
+            this.saveData();
         },
 
         sortByFavorite(column) {
@@ -111,8 +111,22 @@ new Vue({
         },
 
         toggleFavorite(note) {
-            note.isFavorite = !note.isFavorite;  // Переключаем состояние избранного
+            note.isFavorite = !note.isFavorite;
+
+            // Найти столбец, в котором находится карточка
+            for (let i = 0; i < this.columns.length; i++) {
+                let index = this.columns[i].indexOf(note);
+                if (index !== -1) {
+                    // Удаляем карточку из текущей позиции
+                    this.columns[i].splice(index, 1);
+                    // Вставляем ее в начало списка
+                    this.columns[i].unshift(note);
+                    break;
+                }
+            }
+
             this.saveData();
+            this.$forceUpdate(); // Форсируем обновление Vue
         },
 
         saveData() {
