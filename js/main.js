@@ -4,17 +4,25 @@ new Vue({
         columns: [[], [], []]
     },
     methods: {
-        addNote(columnIndex) {
-            let title = prompt("Введите заголовок:");
-            if (!title) return;
-
-            let items = [];
-            for (let i = 0; i < 3; i++) {
-                let task = prompt(`Введите пункт ${i + 1}:`);
-                if (task) items.push({ text: task, done: false });
-            }
-
-            this.columns[columnIndex].push({ title, items });
+        updateProgress() {
+            this.columns[0] = this.columns[0].filter(note => {
+                let completed = note.items.filter(i => i.done).length;
+                if (completed / note.items.length > 0.5 && this.columns[1].length < 5) {
+                    this.columns[1].push(note);
+                    return false;
+                }
+                return true;
+            });
+    
+            this.columns[1] = this.columns[1].filter(note => {
+                let completed = note.items.every(i => i.done);
+                if (completed) {
+                    note.completedAt = new Date().toLocaleString();
+                    this.columns[2].push(note);
+                    return false;
+                }
+                return true;
+            });
         }
     }
 });
