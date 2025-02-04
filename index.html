@@ -14,9 +14,15 @@
         <div class="container">
             <div class="column" v-for="(notes, index) in columns">
                 <h3>Колонка {{ index + 1 }}</h3>
-                <div v-for="note in notes" class="note">
+                <div class="note" v-for="note in notes">
                     <h4>{{ note.title }}</h4>
+                    <ul>
+                        <li v-for="item in note.items">
+                            <input type="checkbox" v-model="item.done"> {{ item.text }}
+                        </li>
+                    </ul>
                 </div>
+                
             </div>
         </div>
     </div>
