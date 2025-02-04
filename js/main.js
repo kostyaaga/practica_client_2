@@ -20,6 +20,7 @@ new Vue({
     
             let title = prompt("Введите заголовок:");
             if (!title) return;
+
     
             let itemCount;
             do {
@@ -33,6 +34,19 @@ new Vue({
             }
     
             this.columns[columnIndex].push({ title, items });
+        },
+        saveData() {
+            localStorage.setItem('notes', JSON.stringify(this.columns));
+        },
+        loadData() {
+            let data = localStorage.getItem('notes');
+            if (data) {
+                this.columns = JSON.parse(data);
+            }
         }
+    },
+    mounted() {
+        this.loadData();
     }
-});
+    }
+);
