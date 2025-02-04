@@ -10,9 +10,13 @@
 </head>
 <body>
     <div id="app">
+        <button @click="addNote(0)">Добавить заметку</button>
         <div class="container">
             <div class="column" v-for="(notes, index) in columns">
                 <h3>Колонка {{ index + 1 }}</h3>
+                <div v-for="note in notes" class="note">
+                    <h4>{{ note.title }}</h4>
+                </div>
             </div>
         </div>
     </div>
